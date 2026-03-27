@@ -302,7 +302,12 @@ class Seo
     {
         // Two arguments indicate that we're setting a value, e.g. `@seo('title', 'foo')
         if (count($args) === 2 && is_string($args[0])) {
-            $result = $this->set($args[0], $args[1]);
+            $value = $args[1];
+            // Convert non-string values (like UrlGenerator) to strings
+            if (!is_string($value) && !is_null($value) && !$value instanceof \Closure) {
+                $value = (string) $value;
+            }
+            $result = $this->set($args[0], $value);
 
             return is_string($result) || is_null($result) ? e($result) : $result;
         }
@@ -311,6 +316,10 @@ class Seo
         if (count($args) === 1 && is_array($args[0])) {
             foreach ($args[0] as $type => $value) {
                 if (is_string($type)) {
+                    // Convert non-string values (like UrlGenerator) to strings
+                    if (!is_string($value) && !is_null($value) && !$value instanceof \Closure) {
+                        $value = (string) $value;
+                    }
                     $this->set($type, $value);
                 }
             }
