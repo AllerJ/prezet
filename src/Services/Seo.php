@@ -303,9 +303,14 @@ class Seo
         // Two arguments indicate that we're setting a value, e.g. `@seo('title', 'foo')
         if (count($args) === 2 && is_string($args[0])) {
             $value = $args[1];
-            // Convert UrlGenerator or other objects to strings
-            if ($value instanceof \Illuminate\Routing\UrlGenerator) {
-                $value = $value->toString();
+            // Only accept string, Closure, or null - skip other types
+            if (!is_string($value) && !is_null($value) && !$value instanceof \Closure) {
+                // Try to convert to string, skip if not possible
+                if (is_object($value) && method_exists($value, '__toString')) {
+                    $value = (string) $value;
+                } else {
+                    return null;
+                }
             }
             $result = $this->set($args[0], $value);
 
@@ -316,9 +321,14 @@ class Seo
         if (count($args) === 1 && is_array($args[0])) {
             foreach ($args[0] as $type => $value) {
                 if (is_string($type)) {
-                    // Convert UrlGenerator or other objects to strings
-                    if ($value instanceof \Illuminate\Routing\UrlGenerator) {
-                        $value = $value->toString();
+                    // Only accept string, Closure, or null - skip other types
+                    if (!is_string($value) && !is_null($value) && !$value instanceof \Closure) {
+                        // Try to convert to string, skip if not possible
+                        if (is_object($value) && method_exists($value, '__toString')) {
+                            $value = (string) $value;
+                        } else {
+                            continue;
+                        }
                     }
                     $this->set($type, $value);
                 }
