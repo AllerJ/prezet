@@ -55,7 +55,10 @@ class GetDocumentModelFromSlug
         // found a match so redirect to the correct slug
         if ($doc) {
             throw new HttpResponseException(
-                redirect()->route('prezet.show', $doc->slug, app()->isProduction() ? 301 : 302)
+                redirect()->route('prezet.show', [
+                    'category' => $doc->category ?? 'limbo',
+                    'slug' => $doc->slug,
+                ], app()->isProduction() ? 301 : 302)
             );
         }
     }
@@ -75,7 +78,10 @@ class GetDocumentModelFromSlug
         // found a match so redirect to the correct slug
         if ($doc) {
             throw new HttpResponseException(
-                redirect()->route('prezet.show', $doc->slug, app()->isProduction() ? 301 : 302)
+                redirect()->route('prezet.show', [
+                    'category' => $doc->category ?? 'limbo',
+                    'slug' => $doc->slug,
+                ], app()->isProduction() ? 301 : 302)
             );
         }
     }

@@ -58,7 +58,10 @@ class Heading extends Model
         $fragment = $this->section ? "#content-{$fragment}" : '';
 
         return new Attribute(
-            get: fn () => route('prezet.show', $this->document?->slug, false).$fragment
+            get: fn () => route('prezet.show', [
+                'category' => $this->document?->category ?? 'limbo',
+                'slug' => $this->document?->slug,
+            ], false).$fragment
         );
     }
 }

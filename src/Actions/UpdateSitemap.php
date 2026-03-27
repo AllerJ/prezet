@@ -26,7 +26,10 @@ class UpdateSitemap
             }
 
             $sitemapUrl = config('prezet.sitemap.origin');
-            $sitemap->add(Url::create($sitemapUrl.route('prezet.show', $doc->slug, false))
+            $sitemap->add(Url::create($sitemapUrl.route('prezet.show', [
+                'category' => $doc->category ?? 'limbo',
+                'slug' => $doc->slug,
+            ], false)))
                 ->setLastModificationDate($doc->updated_at)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                 ->setPriority(0.7)
